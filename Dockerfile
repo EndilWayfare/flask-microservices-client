@@ -5,10 +5,17 @@ WORKDIR /usr/src/app
 
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
+ARG REACT_APP_USERS_SERVICE_URL
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
+ENV REACT_APP_USERS_SERVICE_URL $REACT_APP_USERS_SERVICE_URL
+
 ADD package.json /usr/src/app/package.json
 RUN npm install --silent
-RUN npm install react-scripts@0.9.5 -g --silent
+RUN npm install pushstate-server -g --silent
 
 ADD . /usr/src/app
 
-CMD ["npm", "start"]
+RUN npm run build
+
+CMD ["pushstate-server", "build"]
